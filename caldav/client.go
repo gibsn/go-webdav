@@ -178,6 +178,10 @@ func decodeCalendarObjectList(ms *internal.Multistatus) ([]CalendarObject, error
 
 		var calData calendarDataResp
 		if err := resp.DecodeProp(&calData); err != nil {
+			if internal.IsNotFound(err) { // skipping empty events (server bug)
+				continue
+			}
+
 			return nil, err
 		}
 
